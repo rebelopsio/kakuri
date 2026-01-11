@@ -1,9 +1,16 @@
 const std = @import("std");
 
-const Workload = struct {
-    id: []u8,
-    image: []u8,
-    runtime_class: []u8,
-    memory_mb: i64,
-    cpu_milicores: i64,
+pub const Resources = struct {
+    memory_mb: u64,
+    cpu_millicores: u64,
+};
+
+pub const Workload = struct {
+    id: []const u8,
+    image: []const u8,
+    runtime_class: []const u8,
+    resources: Resources,
+    enabled: bool,
+    description: ?[]const u8,
+    ports: []u64,
 };
