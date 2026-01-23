@@ -6,10 +6,37 @@ pub fn build(b: *std.Build) void {
 
     // kakuri module
     const kakuri_mod = b.createModule(.{
-        .root_source_file = b.path("src/root.zig"),
+        .root_source_file = b.path("src/kakuri.zig"),
         .target = target,
         .optimize = optimize,
     });
+
+    // json module
+    // const json_mod = b.createModule(.{
+    //     .root_source_file = b.path("src/json.zig"),
+    //     .target = target,
+    //     .optimize = optimize,
+    // });
+
+    // http module
+    // const http_mod = b.createModule(.{
+    //     .root_source_file = b.path("src/http.zig"),
+    //     .target = target,
+    //     .optimize = optimize,
+    // });
+
+    // tcp module
+    // const tcp_mod = b.createModule(.{
+    //     .root_source_file = b.path("src/tcp.zig"),
+    //     .target = target,
+    //     .optimize = optimize,
+    // });
+
+    // const agent_mod = b.createModule(.{
+    //     .root_source_file = b.path("src/agent.zig"),
+    //     .target = target,
+    //     .optimize = optimize,
+    // });
 
     // kakuri-agent
     const agent_exe = b.addExecutable(.{
@@ -38,6 +65,19 @@ pub fn build(b: *std.Build) void {
         }),
     });
     b.installArtifact(cp_exe);
+
+    const kakuri_tests = b.addTest(.{
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("src/kakuri.zig"),
+            .target = target,
+            .optimize = optimize,
+        }),
+    });
+
+    const run_kakuri_tests = b.addRunArtifact(kakuri_tests);
+
+    const test_step = b.step("test", "Run unit tests");
+    test_step.dependOn(&run_kakuri_tests.step);
 
     // Optional convenience run steps
     const run_agent = b.addRunArtifact(agent_exe);
